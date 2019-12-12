@@ -1,8 +1,9 @@
-import { Component, OnInit, HostListener  } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { Observable } from 'rxjs';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { UserResponse } from '../user-response';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -11,16 +12,14 @@ import { UserResponse } from '../user-response';
 })
 export class UsersComponent implements OnInit {
 
-  users: User[];
+  users$: Observable<User[]>;
 
   constructor(
     private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.userService
-      .getUsers()
-      .subscribe((response: UserResponse) => this.users = response.results);
+    this.users$ = this.userService.getUsers();
   }
 
 }
