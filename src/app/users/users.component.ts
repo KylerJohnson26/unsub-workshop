@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener  } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy  } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { User } from '../user';
 import { UserService } from '../user.service';
@@ -9,8 +9,9 @@ import { UserResponse } from '../user-response';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
 
+  usersSub: Subscription;
   users: User[];
 
   constructor(
@@ -18,9 +19,15 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userService
+    this.usersSub = this.userService
       .getUsers()
       .subscribe((response: UserResponse) => this.users = response.results);
+  }
+
+  @HostListener('window:beforeunload')
+  ngOnDestroy(): void {
+    if (this.usersSub)
+      this.usersSub.unsubscribe();
   }
 
 }
