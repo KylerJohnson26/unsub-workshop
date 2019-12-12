@@ -1,0 +1,28 @@
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1976D2;
+  color: white;
+  padding: 0 1em;
+
+  .links {
+    display: flex;
+    flex-direction: row;
+
+    .link {
+      color: white;
+      text-decoration: none;
+    }
+
+    .link:first-child {
+      margin-right: 1em;
+    }
+
+    .active {
+      color: #dd0031;
+      font-weight: bold;
+    }
+  }
+}

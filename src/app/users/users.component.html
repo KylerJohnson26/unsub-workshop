@@ -1,0 +1,10 @@
+<div class="app-wrapper">
+  <div class="users-container" *ngIf="users && users.length > 0">
+    <ul>
+      <li
+        *ngFor="let user of users">
+        {{ user.name.first }} {{ user.name.last }}
+      </li>
+    </ul>
+  </div>
+</div>
