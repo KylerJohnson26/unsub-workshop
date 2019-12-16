@@ -1,8 +1,9 @@
-import { Component, OnInit, HostListener  } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable, combineLatest } from 'rxjs';
 import { User } from '../user';
 import { UserService } from '../user.service';
-import { UserResponse } from '../user-response';
+import { TokenInfo } from '../token-info.model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -11,16 +12,22 @@ import { UserResponse } from '../user-response';
 })
 export class UsersComponent implements OnInit {
 
-  users: User[];
+  vm$: Observable<{
+    users: User[],
+    tokenInfo: TokenInfo
+  }>;
 
   constructor(
     private userService: UserService
   ) {}
 
   ngOnInit(): void {
-    this.userService
-      .getUsers()
-      .subscribe((response: UserResponse) => this.users = response.results);
+    this.vm$ = combineLatest([
+      this.userService.getUsers(),
+      this.userService.getTokenInfo()
+    ]).pipe(
+      map(([users, tokenInfo]) => ({ users, tokenInfo }))
+    );
   }
 
 }

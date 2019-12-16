@@ -1,8 +1,15 @@
-<div class="app-wrapper">
-  <div class="users-container" *ngIf="users && users.length > 0">
+<div class="app-wrapper" *ngIf="vm$ | async as vm">
+  <div class="users-container" *ngIf="vm.tokenInfo">
+    <h3>Token Information</h3>
+    <p>Name: {{ vm.tokenInfo.name }}</p>
+    <p>Sub: {{ vm.tokenInfo.sub }}</p>
+    <p>IAT: {{ vm.tokenInfo.iat }}</p>
+  </div>
+  <div class="users-container" *ngIf="vm.users && vm.users.length > 0">
+    <h3>Managed Users</h3>
     <ul>
       <li
-        *ngFor="let user of users">
+        *ngFor="let user of vm.users">
         {{ user.name.first }} {{ user.name.last }}
       </li>
     </ul>

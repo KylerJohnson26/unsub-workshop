@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { UserResponse } from './user-response';
 import { HttpClient } from '@angular/common/http';
+import { TokenInfo } from './token-info.model';
+import { map } from 'rxjs/operators';
+import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +15,21 @@ export class UserService {
     private http: HttpClient
   ) { }
 
-  getUsers(): Observable<UserResponse> {
+  getUsers(): Observable<User[]> {
     const url = 'https://randomuser.me/api/?results=10&apikey=J0EN-79MX-OHT1-AFKF'
-    return this.http.get<UserResponse>(url);
+    return this.http.get<UserResponse>(url).pipe(
+      map(response => response.results)
+    );
+  }
+
+  getTokenInfo(): Observable<TokenInfo> {
+    const tokenInfo = new TokenInfo(
+      '1234567890',
+      'Gentry Vandergoose',
+      1516239022
+    );
+
+    return of(tokenInfo);
   }
 
 }
