@@ -1,5 +1,12 @@
 <div class="app-wrapper">
+  <div class="token-info">
+    <h3>Token Info</h3>
+    <p>Sub: {{ tokenInfo.sub }}</p>
+    <p>Name: {{ tokenInfo.name }}</p>
+    <p>IAT: {{ tokenInfo.iat }}</p>
+  </div>
   <div class="users-container" *ngIf="users && users.length > 0">
+    <h3>Managed Users</h3>
     <ul>
       <li
         *ngFor="let user of users">

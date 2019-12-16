@@ -4,6 +4,7 @@ import { User } from '../user';
 import { UserService } from '../user.service';
 import { UserResponse } from '../user-response';
 import { takeUntil } from 'rxjs/operators';
+import { TokenInfo } from '../token-info.model';
 
 @Component({
   selector: 'app-users',
@@ -14,6 +15,8 @@ export class UsersComponent implements OnInit {
 
   private onDestroy$: Subject<void> = new Subject<void>();
 
+  tokenInfoSub: Subscription;
+  tokenInfo: TokenInfo;
   usersSub: Subscription;
   users: User[];
 
@@ -28,6 +31,11 @@ export class UsersComponent implements OnInit {
       // to avoid memory leaks
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((response: UserResponse) => this.users = response.results);
+
+    this.tokenInfoSub = this.userService
+      .getTokenInfo()
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((tokenInfo: TokenInfo) => this.tokenInfo = tokenInfo);
   }
 
   @HostListener('window:beforeunload')
