@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener  } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy  } from '@angular/core';
 import { Subscription, Subject } from 'rxjs';
 import { User } from '../user';
 import { UserService } from '../user.service';
@@ -11,7 +11,7 @@ import { TokenInfo } from '../token-info.model';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, OnDestroy {
 
   private onDestroy$: Subject<void> = new Subject<void>();
 
@@ -27,8 +27,6 @@ export class UsersComponent implements OnInit {
   ngOnInit(): void {
     this.usersSub = this.userService
       .getUsers()
-      // takeUntil should always be the last operator in the pipe
-      // to avoid memory leaks
       .pipe(takeUntil(this.onDestroy$))
       .subscribe((response: UserResponse) => this.users = response.results);
 
@@ -40,8 +38,6 @@ export class UsersComponent implements OnInit {
 
   @HostListener('window:beforeunload')
   ngOnDestroy(): void {
-    // all observable streams complete automatically unsubscribing
-    // when OnDestroy runs
     this.onDestroy$.next();
   }
 }
